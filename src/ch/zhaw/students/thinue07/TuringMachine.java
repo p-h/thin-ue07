@@ -181,8 +181,14 @@ public class TuringMachine {
 			numberOfComputations++;
 		}
 
-		// TODO: Implement
-		String result = "";
+		StringBuilder sb = new StringBuilder();
+		for (Alphabet field : band) {
+			if (field != Alphabet.BLANK) {
+				sb.append(field.getValue());
+			}
+		}
+
+		String result = sb.toString();
 
 		System.out.printf("Result: %s\n", result);
 		System.out.printf("Current state: %s\n", this.state);
