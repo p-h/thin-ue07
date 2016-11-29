@@ -171,7 +171,7 @@ public class TuringMachine {
 
 	public void Run() {
 		DeltaNew deltaNew;
-		while ((deltaNew = Delta(new DeltaInput(INITIAL_STATE, this.band[this.bandPosition]))) != null) {
+		while ((deltaNew = Delta(new DeltaInput(this.state, this.band[this.bandPosition]))) != null) {
 			this.state = deltaNew.state;
 			this.band[bandPosition] = deltaNew.field;
 			this.bandPosition += deltaNew.movement.getValue();
