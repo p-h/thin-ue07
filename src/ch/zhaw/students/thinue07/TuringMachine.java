@@ -8,7 +8,7 @@ public class TuringMachine {
 	private static final int BAND_LENGTH = 16384;
 
 	enum Alphabet {
-		EMPTY(' '), ZERO('0'), ONE('1'), X('x'), Y('y'), Z('z');
+		BLANK('␣'), ZERO('0'), ONE('1'), X('x'), Y('y'), Z('z');
 
 
 		public char getValue() {
@@ -106,10 +106,10 @@ public class TuringMachine {
 
 		put(new DeltaInput(State.Q3, Alphabet.ONE), new DeltaNew(State.Q3, Alphabet.ONE, Movement.RIGHT));
 		put(new DeltaInput(State.Q3, Alphabet.Z), new DeltaNew(State.Q4, Alphabet.Z, Movement.RIGHT));
-		put(new DeltaInput(State.Q3, Alphabet.EMPTY), new DeltaNew(State.Q4, Alphabet.Z, Movement.RIGHT));
+		put(new DeltaInput(State.Q3, Alphabet.BLANK), new DeltaNew(State.Q4, Alphabet.Z, Movement.RIGHT));
 
 		put(new DeltaInput(State.Q4, Alphabet.ONE), new DeltaNew(State.Q4, Alphabet.ONE, Movement.RIGHT));
-		put(new DeltaInput(State.Q4, Alphabet.EMPTY), new DeltaNew(State.Q5, Alphabet.ONE, Movement.LEFT));
+		put(new DeltaInput(State.Q4, Alphabet.BLANK), new DeltaNew(State.Q5, Alphabet.ONE, Movement.LEFT));
 
 		put(new DeltaInput(State.Q5, Alphabet.Z), new DeltaNew(State.Q5, Alphabet.Z, Movement.LEFT));
 		put(new DeltaInput(State.Q5, Alphabet.ONE), new DeltaNew(State.Q5, Alphabet.ONE, Movement.LEFT));
@@ -119,9 +119,9 @@ public class TuringMachine {
 
 		put(new DeltaInput(State.Q7, Alphabet.ONE), new DeltaNew(State.Q7, Alphabet.ONE, Movement.RIGHT));
 		put(new DeltaInput(State.Q7, Alphabet.Z), new DeltaNew(State.Q7, Alphabet.Z, Movement.RIGHT));
-		put(new DeltaInput(State.Q7, Alphabet.EMPTY), new DeltaNew(State.Q8, Alphabet.ONE, Movement.RIGHT));
+		put(new DeltaInput(State.Q7, Alphabet.BLANK), new DeltaNew(State.Q8, Alphabet.ONE, Movement.RIGHT));
 
-		put(new DeltaInput(State.Q8, Alphabet.EMPTY), new DeltaNew(State.Q9, Alphabet.EMPTY, Movement.LEFT));
+		put(new DeltaInput(State.Q8, Alphabet.BLANK), new DeltaNew(State.Q9, Alphabet.BLANK, Movement.LEFT));
 
 		put(new DeltaInput(State.Q9, Alphabet.ONE), new DeltaNew(State.Q9, Alphabet.ONE, Movement.LEFT));
 		put(new DeltaInput(State.Q9, Alphabet.Z), new DeltaNew(State.Q10, Alphabet.Z, Movement.LEFT));
@@ -137,18 +137,19 @@ public class TuringMachine {
 		put(new DeltaInput(State.Q1, Alphabet.ONE), new DeltaNew(State.Q1, Alphabet.X, Movement.RIGHT));
 
 		put(new DeltaInput(State.Q12, Alphabet.X), new DeltaNew(State.Q12, Alphabet.X, Movement.LEFT));
-		put(new DeltaInput(State.Q12, Alphabet.EMPTY), new DeltaNew(State.Q13, Alphabet.EMPTY, Movement.RIGHT));
+		put(new DeltaInput(State.Q12, Alphabet.BLANK), new DeltaNew(State.Q13, Alphabet.BLANK, Movement.RIGHT));
 
-		put(new DeltaInput(State.Q13, Alphabet.ONE), new DeltaNew(State.Q13, Alphabet.EMPTY, Movement.RIGHT));
-		put(new DeltaInput(State.Q13, Alphabet.ZERO), new DeltaNew(State.Q13, Alphabet.EMPTY, Movement.RIGHT));
-		put(new DeltaInput(State.Q13, Alphabet.X), new DeltaNew(State.Q13, Alphabet.EMPTY, Movement.RIGHT));
-		put(new DeltaInput(State.Q13, Alphabet.Z), new DeltaNew(State.Q14, Alphabet.EMPTY, Movement.RIGHT));
+		put(new DeltaInput(State.Q13, Alphabet.ONE), new DeltaNew(State.Q13, Alphabet.BLANK, Movement.RIGHT));
+		put(new DeltaInput(State.Q13, Alphabet.ZERO), new DeltaNew(State.Q13, Alphabet.BLANK, Movement.RIGHT));
+		put(new DeltaInput(State.Q13, Alphabet.X), new DeltaNew(State.Q13, Alphabet.BLANK, Movement.RIGHT));
+		put(new DeltaInput(State.Q13, Alphabet.Z), new DeltaNew(State.Q14, Alphabet.BLANK, Movement.RIGHT));
 
 		put(new DeltaInput(State.Q15, Alphabet.ONE), new DeltaNew(State.Q15, Alphabet.ONE, Movement.LEFT));
 		put(new DeltaInput(State.Q15, Alphabet.X), new DeltaNew(State.Q0, Alphabet.X, Movement.RIGHT));
 	}};
 
 	private static final State INITIAL_STATE = State.Q0;
+	private static final State ACCEPTING_STATE = State.Q15;
 
 	private final boolean verbose;
 	private final Alphabet[] band;
@@ -161,7 +162,7 @@ public class TuringMachine {
 		this.state = INITIAL_STATE;
 		this.band = new Alphabet[BAND_LENGTH];
 		for (int i = 0; i < this.band.length; i++) {
-			this.band[i] = Alphabet.EMPTY;
+			this.band[i] = Alphabet.BLANK;
 		}
 		this.bandPosition = BAND_LENGTH / 2;
 
@@ -173,11 +174,30 @@ public class TuringMachine {
 
 	public void Run() {
 		DeltaNew deltaNew;
+		int numberOfComputations = 0;
 		while ((deltaNew = Delta(new DeltaInput(this.state, this.band[this.bandPosition]))) != null) {
+			if (verbose) {
+				System.out.printf("δ(%s, %c) = (%s, %c, %s)\n", state, band[bandPosition].getValue(), deltaNew.state, deltaNew.field.getValue(), deltaNew.movement);
+			}
 			this.state = deltaNew.state;
 			this.band[bandPosition] = deltaNew.field;
 			this.bandPosition += deltaNew.movement.getValue();
+
+			numberOfComputations++;
 		}
+
+		// TODO: Implement
+		String result = "";
+
+		System.out.printf("Result: %s\n", result);
+		System.out.printf("Current state: %s\n", this.state);
+		System.out.println("               ↓");
+		for (int i = bandPosition - 15; i < bandPosition + 15; i++) {
+			System.out.print(band[i].getValue());
+		}
+		System.out.println();
+		System.out.printf("Number of computations: %d\n", numberOfComputations);
+
 	}
 
 	private DeltaNew Delta(DeltaInput foo) {
