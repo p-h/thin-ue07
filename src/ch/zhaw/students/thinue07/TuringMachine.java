@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class TuringMachine {
-	public enum Alphabet {
+	enum Alphabet {
 		EMPTY(' '), ZERO('0'), ONE('1'), X('x'), Y('y'), Z('z');
 
 
@@ -24,7 +24,7 @@ public class TuringMachine {
 		}
 	}
 
-	private enum State {
+	enum State {
 		Q0,
 		Q1,
 		Q2,
@@ -43,7 +43,7 @@ public class TuringMachine {
 		Q15,
 	}
 
-	private enum Movement {
+	enum Movement {
 		LEFT(-1), STILL(0), RIGHT(1),;
 
 		private final int value;
@@ -57,7 +57,7 @@ public class TuringMachine {
 		}
 	}
 
-	private static class DeltaInput {
+	static class DeltaInput {
 		final State state;
 		final Alphabet field;
 
@@ -82,7 +82,7 @@ public class TuringMachine {
 		}
 	}
 
-	private static class DeltaNew {
+	static class DeltaNew {
 		final State state;
 		final Alphabet field;
 		final Movement movement;
