@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class TuringMachine {
+	private static final int BAND_LENGTH = 16384;
+
 	enum Alphabet {
 		EMPTY(' '), ZERO('0'), ONE('1'), X('x'), Y('y'), Z('z');
 
@@ -157,11 +159,11 @@ public class TuringMachine {
 	public TuringMachine(String input, boolean verbose) {
 		this.verbose = verbose;
 		this.state = INITIAL_STATE;
-		this.band = new Alphabet[Integer.MAX_VALUE];
+		this.band = new Alphabet[BAND_LENGTH];
 		for (int i = 0; i < this.band.length; i++) {
 			this.band[i] = Alphabet.EMPTY;
 		}
-		this.bandPosition = Integer.MAX_VALUE / 2;
+		this.bandPosition = BAND_LENGTH / 2;
 
 		char[] inputArr = input.toCharArray();
 		for (int i = 0; i < inputArr.length && i <= this.band.length; i++) {
