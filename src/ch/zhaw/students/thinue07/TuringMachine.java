@@ -171,7 +171,7 @@ public class TuringMachine {
 		}
 	}
 
-	public void Run() {
+	public void run() {
 		DeltaNew deltaNew;
 		int numberOfComputations = 0;
 		while ((deltaNew = Delta(new DeltaInput(this.state, this.band[this.bandPosition]))) != null) {

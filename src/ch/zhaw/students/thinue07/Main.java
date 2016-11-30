@@ -10,7 +10,7 @@ public class Main {
 		Optional<String> input = Stream.of(args).filter(a -> a.matches("0*10*")).findFirst();
 		if (input.isPresent()) {
 			TuringMachine myMachine = new TuringMachine(input.get(), verbose);
-			myMachine.Run();
+			myMachine.run();
 		} else {
 			System.out.println("Please enter a valid input string");
 		}
