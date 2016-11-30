@@ -1,5 +1,6 @@
 package ch.zhaw.students.thinue07;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -150,14 +151,14 @@ public class TuringMachine {
 	private static final State INITIAL_STATE = State.Q0;
 	private static final State ACCEPTING_STATE = State.Q14;
 
-	private final boolean verbose;
+	private final boolean stepMode;
 	private final Alphabet[] band;
 	private int bandPosition;
 	private State state;
 
 
-	public TuringMachine(String input, boolean verbose) {
-		this.verbose = verbose;
+	public TuringMachine(String input, boolean stepMode) {
+		this.stepMode = stepMode;
 		this.state = INITIAL_STATE;
 		this.band = new Alphabet[BAND_LENGTH];
 		for (int i = 0; i < this.band.length; i++) {
@@ -175,14 +176,23 @@ public class TuringMachine {
 		DeltaNew deltaNew;
 		int numberOfComputations = 0;
 		while ((deltaNew = Delta(new DeltaInput(this.state, this.band[this.bandPosition]))) != null) {
-			if (verbose) {
+			if (stepMode) {
+				printBandState();
 				System.out.printf("δ(%s, %c) = (%s, %c, %s)\n", state, band[bandPosition].getValue(), deltaNew.state, deltaNew.field.getValue(), deltaNew.movement);
+				try {
+					System.in.read();
+				} catch (IOException e) {
+				}
 			}
 			this.state = deltaNew.state;
 			this.band[bandPosition] = deltaNew.field;
 			this.bandPosition += deltaNew.movement.getValue();
 
 			numberOfComputations++;
+		}
+
+		if (!stepMode) {
+			printBandState();
 		}
 
 		StringBuilder sb = new StringBuilder();
@@ -195,14 +205,19 @@ public class TuringMachine {
 		String result = sb.toString();
 
 		System.out.printf("Result: %s\n", result);
+		System.out.println();
+		System.out.printf("Number of computations: %d\n", numberOfComputations);
+
+	}
+
+	private void printBandState() {
 		System.out.printf("Current state: %s\n", this.state);
 		System.out.println("               ↓");
 		for (int i = bandPosition - 15; i < bandPosition + 15; i++) {
 			System.out.print(band[i].getValue());
 		}
-		System.out.println();
-		System.out.printf("Number of computations: %d\n", numberOfComputations);
 
+		System.out.println();
 	}
 
 	private DeltaNew Delta(DeltaInput foo) {
