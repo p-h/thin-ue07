@@ -1,5 +1,6 @@
 package ch.zhaw.students.thinue07;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -96,7 +97,8 @@ public class TuringMachine {
 		}
 	}
 
-	private final static Map<DeltaInput, DeltaNew> Transitions = new HashMap<DeltaInput, DeltaNew>() {{
+
+	private final static Map<DeltaInput, DeltaNew> Transitions = Collections.unmodifiableMap(new HashMap<DeltaInput, DeltaNew>() {{
 		put(new DeltaInput(State.Q0, Alphabet.ZERO), new DeltaNew(State.Q1, Alphabet.X, Movement.RIGHT));
 
 		put(new DeltaInput(State.Q1, Alphabet.ONE), new DeltaNew(State.Q2, Alphabet.ONE, Movement.RIGHT));
@@ -143,7 +145,7 @@ public class TuringMachine {
 
 		put(new DeltaInput(State.Q15, Alphabet.X), new DeltaNew(State.Q0, Alphabet.X, Movement.RIGHT));
 		put(new DeltaInput(State.Q15, Alphabet.ZERO), new DeltaNew(State.Q15, Alphabet.ZERO, Movement.LEFT));
-	}};
+	}});
 
 	private static final State INITIAL_STATE = State.Q0;
 	private static final State ACCEPTING_STATE = State.Q15;
