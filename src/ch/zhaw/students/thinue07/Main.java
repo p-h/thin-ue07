@@ -7,7 +7,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		boolean verbose = Stream.of(args).anyMatch("-v"::equals);
-		Optional<String> input = Stream.of(args).filter(a -> a.matches("[01]+")).findFirst();
+		Optional<String> input = Stream.of(args).filter(a -> a.matches("0*10*")).findFirst();
 		if (input.isPresent()) {
 			TuringMachine myMachine = new TuringMachine(input.get(), verbose);
 			myMachine.Run();
