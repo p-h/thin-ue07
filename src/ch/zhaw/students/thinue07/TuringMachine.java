@@ -148,7 +148,7 @@ public class TuringMachine {
 	}});
 
 	private static final State INITIAL_STATE = State.Q0;
-	private static final State ACCEPTING_STATE = State.Q15;
+	private static final State ACCEPTING_STATE = State.Q14;
 
 	private final boolean verbose;
 	private final Alphabet[] band;
