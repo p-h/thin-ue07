@@ -6,7 +6,7 @@
 
     <groupId>ch.zhaw.students.ch</groupId>
     <artifactId>thinue07</artifactId>
-    <version>0.1</version>
+    <version>0.3</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
