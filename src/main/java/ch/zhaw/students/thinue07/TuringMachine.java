@@ -199,7 +199,7 @@ public class TuringMachine {
 
 	public void run() {
 		DeltaNew deltaNew;
-		int numberOfComputations = 0;
+		long numberOfComputations = 0;
 		while ((deltaNew = Delta(new DeltaInput(this.state, this.band[this.bandPosition]))) != null) {
 			if (stepMode) {
 				printBandState();
