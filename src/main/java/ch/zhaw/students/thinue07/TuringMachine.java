@@ -229,6 +229,8 @@ public class TuringMachine {
 
 		String result = sb.toString();
 
+		System.out.printf("State %s is %s.\n", state,
+				state == ACCEPTING_STATE ? "accepting" : "not accepting");
 		System.out.printf("Result: %s\n", result);
 		System.out.println();
 		System.out.printf("Number of computations: %d\n", numberOfComputations);
